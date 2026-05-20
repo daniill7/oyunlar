@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Üye Ol</title>
+</head>
+<body>
+  <h2>Üye Ol</h2>
+  <form id="signupForm">
+    <input type="text" id="name" placeholder="İsim" required><br><br>
+    <input type="email" id="email" placeholder="Email" required><br><br>
+    <button type="submit">Kayıt Ol</button>
+  </form>
+  <p id="message"></p>
+
+  <script type="module">
+    // 🔹 Firebase App ve Firestore modüllerini import et
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
+
+    // 🔹 Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyAa3lSacGJkZ0BV6dexcQrRn8IjnJWD2yE",
+      authDomain: "dened123.firebaseapp.com",
+      projectId: "dened123",
+      storageBucket: "dened123.firebasestorage.app",
+      messagingSenderId: "1065130531709",
+      appId: "1:1065130531709:web:41d88ba91370d1f99eca14",
+      measurementId: "G-KT43E3HMF1"
+    };
+
+    // 🔹 Firebase başlat
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const form = document.getElementById('signupForm');
+    const message = document.getElementById('message');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+
+      try {
+        await addDoc(collection(db, "users"), {
+          name: name,
+          email: email,
+          timestamp: serverTimestamp()
+        });
+        message.textContent = "Kayıt başarılı!";
+        form.reset();
+      } catch (err) {
+        console.error(err);
+        message.textContent = "Hata oluştu! Console’a bak.";
+      }
+    });
+  </script>
+</body>
+</html>
